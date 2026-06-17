@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATS Checker | InterviewPro AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & BASE ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green-50:  #f0fdf4;
+  --green-100: #dcfce7;
+  --green-200: #bbf7d0;
+  --green-400: #4ade80;
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+  --green-700: #15803d;
+  --green-900: #064e3b;
+  --cream:     #ecffe0;
+  --white:     #ffffff;
+  --gray-400:  #9ca3af;
+  --gray-500:  #6b7280;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-sm: 0 2px 12px rgba(34,197,94,.08);
+  --shadow-md: 0 6px 24px rgba(34,197,94,.14);
+  --shadow-lg: 0 12px 40px rgba(34,197,94,.2);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--cream);
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--green-900);
+}
+
+body::before {
+  content: "";
+  position: fixed; top: 0; left: 0;
+  width: 50%; height: 100%;
+  background: var(--cream);
+  z-index: -2;
+}
+body::after {
+  content: "";
+  position: fixed; top: 0; right: 0;
+  width: 50%; height: 100%;
+  background: var(--white);
+  z-index: -2;
+}
+
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: .18;
+  pointer-events: none;
+  z-index: -1;
+}
+.blob-1 { width: 400px; height: 400px; background: var(--green-400); top: -80px; left: -80px; }
+.blob-2 { width: 300px; height: 300px; background: var(--green-500); bottom: 80px; right: -60px; }
+
+/* ─── HEADER ───────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 40px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  background: rgba(236,255,224,.85);
+  border-bottom: 1px solid rgba(34,197,94,.12);
+}
+
+.logo { font-weight: 800; font-size: 22px; color: var(--green-600); letter-spacing: -.5px; }
+.logo span { color: var(--green-900); }
+
+.header-actions { display: flex; gap: 10px; }
+
+.header-btn {
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .25s;
+  border: none;
+  text-decoration: none;
+}
+.header-btn.primary {
+  background: var(--green-500);
+  color: white;
+}
+.header-btn.primary:hover {
+  background: var(--green-600);
+  transform: translateY(-2px);
+}
+.header-btn.ghost {
+  background: transparent;
+  color: var(--green-700);
+  border: 1px solid var(--green-200);
+}
+.header-btn.ghost:hover {
+  background: var(--green-50);
+}
+
+/* ─── CONTENT ──────────────────────────────────────────── */
+.content { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+
+.page-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--green-900);
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: var(--gray-500);
+  margin-bottom: 32px;
+}
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(34,197,94,.1);
+  padding: 32px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: .3s;
+}
+.card:hover { box-shadow: var(--shadow-md); }
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green-900);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+input[type=file], textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(34,197,94,.2);
+  border-radius: var(--radius-sm);
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  color: var(--green-900);
+  background: var(--white);
+  transition: .2s;
+}
+input[type=file]:hover, textarea:hover {
+  border-color: rgba(34,197,94,.4);
+}
+textarea { resize: vertical; min-height: 120px; }
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: .25s;
+  text-decoration: none;
+}
+.btn-primary {
+  background: var(--green-500);
+  color: white;
+}
+.btn-primary:hover {
+  background: var(--green-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ─── SCORE DISPLAY ────────────────────────────────────── */
+.score-display {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.score-number {
+  font-size: 64px;
+  font-weight: 800;
+  color: var(--green-500);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.score-label {
+  font-size: 16px;
+  color: var(--gray-500);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.metric-card {
+  background: var(--green-50);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  text-align: center;
+  border: 1px solid var(--green-200);
+}
+
+.metric-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--green-600);
+}
+
+.metric-label {
+  font-size: 12px;
+  color: var(--gray-500);
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--green-100);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 8px 0 4px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--green-500);
+  border-radius: 99px;
+  transition: width .6s ease;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.tag {
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tag-matched {
+  background: rgba(34,197,94,.15);
+  color: var(--green-600);
+}
+
+.tag-missing {
+  background: rgba(239,68,68,.15);
+  color: #dc2626;
+}
+
+.suggestion-text {
+  background: var(--green-50);
+  border-left: 4px solid var(--green-500);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin: 16px 0;
+  color: var(--green-900);
+  line-height: 1.6;
+}
+
+.error { color: #dc2626; font-size: 14px; margin: 12px 0; }
+
+@media (max-width: 768px) {
+  .header { padding: 16px 20px; }
+  .content { padding: 24px 16px; }
+  .card { padding: 20px; }
+  .page-title { font-size: 24px; }
+  .metrics-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<div class="header">
+  <div class="logo">InterviewPro <span>AI</span></div>
+  <div class="header-actions">
+    <a href="/" class="header-btn ghost">← Home</a>
+    <a href="/resume_suite" class="header-btn ghost">Resume</a>
+    <a href="/logout" class="header-btn ghost">Logout</a>
+  </div>
+</div>
+
+<div class="content">
+  <div class="page-title">🎯 ATS Checker</div>
+  <div class="page-subtitle">Analyze how recruiters' ATS systems see your resume</div>
+
+  <div class="card">
+    <form method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label class="form-label">Resume File</label>
+        <input type="file" name="resume_file" accept=".pdf,.docx,.txt" required/>
+        <div style="font-size: 12px; color: var(--gray-500); margin-top: 6px;">Supported: PDF, DOCX, TXT (Max 5MB)</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Job Description</label>
+        <textarea name="job_desc" placeholder="Paste the entire job description here for keyword matching analysis..."></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="margin-top: 16px;">🔍 Analyze Resume</button>
+    </form>
+  </div>
+
+  {% if result %}
+  <div class="card">
+    <div class="score-display">
+      <div class="score-number">{{ result.overall_score }}%</div>
+      <div class="score-label">ATS Compatibility Score
+        {% if resume_len %}<br><span style="font-size: 12px;">{{ resume_len }} characters</span>{% endif %}
+      </div>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-value">{{ result.format_score }}%</div>
+        <div class="metric-label">Format Quality</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">{{ result.experience_match }}%</div>
+        <div class="metric-label">Experience Match</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">{{ result.skills_match }}%</div>
+        <div class="metric-label">Skills Match</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px;">
+      {% for label, val in [('Overall Score', result.overall_score), ('Format', result.format_score), ('Experience', result.experience_match), ('Skills', result.skills_match)] %}
+      <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--green-900);">
+          <span>{{ label }}</span>
+          <span>{{ val }}%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: {{ val }}%;"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if result.matched_keywords %}
+    <div style="margin-top: 24px;">
+      <div style="font-size: 12px; font-weight: 700; color: var(--green-600); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">✅ Matched Keywords</div>
+      <div class="skill-tags">
+        {% for kw in result.matched_keywords %}<span class="tag tag-matched">{{ kw }}</span>{% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if result.missing_keywords %}
+    <div style="margin-top: 24px;">
+      <div style="font-size: 12px; font-weight: 700; color: #dc2626; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">❌ Missing Keywords</div>
+      <div class="skill-tags">
+        {% for kw in result.missing_keywords %}<span class="tag tag-missing">{{ kw }}</span>{% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if result.top_suggestion %}
+    <div class="suggestion-text">
+      <strong style="color: var(--green-600);">💡 Top Suggestion</strong>
+      <p style="margin-top: 8px;">{{ result.top_suggestion }}</p>
+    </div>
+    {% endif %}
+
+    {% if result.summary %}
+    <div style="margin-top: 24px; padding: 16px; background: var(--green-50); border-radius: var(--radius-sm); color: var(--green-900); line-height: 1.7; font-size: 14px;">
+      <strong>📋 Summary</strong>
+      <p style="margin-top: 8px;">{{ result.summary }}</p>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.progress-fill').forEach(el => {
+      const width = el.style.width;
+      if (parseFloat(width) >= 70) {
+        el.style.backgroundColor = 'var(--green-500)';
+      } else if (parseFloat(width) >= 50) {
+        el.style.backgroundColor = 'var(--green-400)';
+      } else {
+        el.style.backgroundColor = '#ef4444';
+      }
+    });
+  });
+</script>
+</body>
+</html>

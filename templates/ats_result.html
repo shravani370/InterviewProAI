@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATS Result | InterviewPro AI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;600;800&display=swap" rel="stylesheet">
+
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  position: relative;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 50%; height: 100%;
+  background: #ecffe0;
+  z-index: -1;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; right: 0;
+  width: 50%; height: 100%;
+  background: white;
+  z-index: -1;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  padding: 20px 40px;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 28px;
+  color: #16a34a;
+}
+
+/* BACK */
+.back-btn {
+  position: fixed;
+  top: 22px;
+  right: 30px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: 0.3s;
+  font-family: 'Sora', sans-serif;
+}
+
+.back-btn:hover {
+  transform: scale(1.06);
+}
+
+/* PAGE */
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 20px 20px 80px;
+}
+
+/* PAGE TITLE */
+.page-title {
+  text-align: center;
+  margin-bottom: 36px;
+  animation: fadeDown 0.5s ease both;
+}
+
+.page-title h1 {
+  font-size: 38px;
+  font-weight: 800;
+  color: #064e3b;
+}
+
+.page-title p {
+  color: #047857;
+  margin-top: 6px;
+  font-size: 15px;
+}
+
+/* SCORE CARD */
+.score-card {
+  background: white;
+  border: 1px solid #c7f9cc;
+  border-radius: 20px;
+  padding: 36px 40px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  box-shadow: 0 4px 20px rgba(34,197,94,0.1);
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+
+/* SCORE RING */
+.score-ring {
+  position: relative;
+  flex-shrink: 0;
+  width: 140px;
+  height: 140px;
+}
+
+.score-ring svg {
+  transform: rotate(-90deg);
+  width: 140px;
+  height: 140px;
+}
+
+.score-ring .track {
+  fill: none;
+  stroke: #dcfce7;
+  stroke-width: 10;
+}
+
+.score-ring .fill {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 339.29;
+  stroke-dashoffset: 339.29;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fill.green { stroke: #22c55e; }
+.fill.yellow { stroke: #f59e0b; }
+.fill.red { stroke: #ef4444; }
+
+.score-number {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-number span {
+  font-size: 38px;
+  font-weight: 800;
+  color: #064e3b;
+  line-height: 1;
+}
+
+.score-number small {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.score-info h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #064e3b;
+  margin-bottom: 8px;
+}
+
+.score-info p {
+  color: #047857;
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 380px;
+}
+
+.score-badge {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.score-badge.good { background: #dcfce7; color: #16a34a; }
+.score-badge.ok   { background: #fef3c7; color: #d97706; }
+.score-badge.bad  { background: #fee2e2; color: #dc2626; }
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* FLASHCARD */
+.flashcard {
+  background: white;
+  border: 1px solid #c7f9cc;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(34,197,94,0.07);
+  animation: fadeUp 0.5s ease both;
+  transition: 0.3s;
+}
+
+.flashcard:hover {
+  transform: translateY(-4px);
+  border-color: #22c55e;
+  box-shadow: 0 6px 20px rgba(34,197,94,0.15);
+}
+
+.flashcard.full {
+  grid-column: 1 / -1;
+}
+
+.flashcard-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f0fdf4;
+}
+
+.flashcard-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.matched .flashcard-icon   { background: #dcfce7; }
+.missing .flashcard-icon   { background: #fee2e2; }
+.suggestions .flashcard-icon { background: #fef3c7; }
+
+.flashcard-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #064e3b;
+}
+
+.flashcard-header .count {
+  margin-left: auto;
+  font-size: 12px;
+  color: #6b7280;
+  background: #f0fdf4;
+  padding: 3px 12px;
+  border-radius: 100px;
+  border: 1px solid #c7f9cc;
+}
+
+/* PILLS */
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 400;
+  animation: popIn 0.3s ease both;
+}
+
+.matched .pill {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+}
+
+.missing .pill {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #dc2626;
+}
+
+/* SUGGESTIONS */
+.suggestion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.suggestion-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  background: #f0fdf4;
+  border: 1px solid #c7f9cc;
+  border-radius: 12px;
+  animation: fadeUp 0.4s ease both;
+  transition: 0.2s;
+}
+
+.suggestion-item:hover {
+  background: #dcfce7;
+  border-color: #22c55e;
+}
+
+.suggestion-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.suggestion-item p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #065f46;
+}
+
+/* EMPTY */
+.empty {
+  color: #9ca3af;
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* BOTTOM BUTTON */
+.bottom-btn {
+  display: block;
+  width: fit-content;
+  margin: 32px auto 0;
+  padding: 14px 32px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  color: white;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(34,197,94,0.3);
+  transition: 0.3s;
+}
+
+.bottom-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34,197,94,0.4);
+}
+
+/* ANIMATIONS */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.flashcard:nth-child(1) { animation-delay: 0.15s; }
+.flashcard:nth-child(2) { animation-delay: 0.25s; }
+.flashcard:nth-child(3) { animation-delay: 0.35s; }
+
+.pill:nth-child(n) { animation-delay: calc(0.05s * var(--i, 1)); }
+
+.suggestion-item:nth-child(1) { animation-delay: 0.35s; }
+.suggestion-item:nth-child(2) { animation-delay: 0.45s; }
+.suggestion-item:nth-child(3) { animation-delay: 0.55s; }
+
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; }
+  .score-card { flex-direction: column; text-align: center; }
+  .score-info p { max-width: 100%; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">InterviewPro AI</div>
+</div>
+
+<a href="/ats" class="back-btn">⬅ Analyze Another</a>
+
+<div class="page">
+
+  <!-- PAGE TITLE -->
+  <div class="page-title">
+    <h1>🎯 ATS Analysis Result</h1>
+    <p>Here's how your resume stacks up against the job description.</p>
+  </div>
+
+  <!-- SCORE CARD -->
+  <div class="score-card">
+    <div class="score-ring">
+      <svg viewBox="0 0 120 120">
+        <circle class="track" cx="60" cy="60" r="54"/>
+        <circle class="fill {% if data.score >= 70 %}green{% elif data.score >= 40 %}yellow{% else %}red{% endif %}"
+          cx="60" cy="60" r="54"
+          id="scoreCircle"
+          data-score="{{ data.score }}"/>
+      </svg>
+      <div class="score-number">
+        <span id="scoreNum">0</span>
+        <small>/ 100</small>
+      </div>
+    </div>
+
+    <div class="score-info">
+      <h2>Your ATS Score</h2>
+      <p>
+        {% if data.score >= 70 %}
+          Strong match! Your resume aligns well with the job description. A few tweaks could push it even higher.
+        {% elif data.score >= 40 %}
+          Moderate match. There are some gaps — address the missing skills to significantly improve your chances.
+        {% else %}
+          Low match. Your resume needs targeted improvements to pass ATS filters for this role.
+        {% endif %}
+      </p>
+      <span class="score-badge {% if data.score >= 70 %}good{% elif data.score >= 40 %}ok{% else %}bad{% endif %}">
+        {% if data.score >= 70 %}✓ Strong Match{% elif data.score >= 40 %}⚡ Moderate Match{% else %}✗ Needs Work{% endif %}
+      </span>
+    </div>
+  </div>
+
+  <!-- SKILLS GRID -->
+  <div class="grid">
+
+    <!-- MATCHED -->
+    <div class="flashcard matched">
+      <div class="flashcard-header">
+        <div class="flashcard-icon">✅</div>
+        <h3>Matched Skills</h3>
+        <span class="count">{{ data.matched_skills | length }}</span>
+      </div>
+      <div class="pills">
+        {% for skill in data.matched_skills %}
+          <span class="pill">{{ skill }}</span>
+        {% else %}
+          <p class="empty">No matched skills found</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- MISSING -->
+    <div class="flashcard missing">
+      <div class="flashcard-header">
+        <div class="flashcard-icon">❌</div>
+        <h3>Missing Skills</h3>
+        <span class="count">{{ data.missing_skills | length }}</span>
+      </div>
+      <div class="pills">
+        {% for skill in data.missing_skills %}
+          <span class="pill">{{ skill }}</span>
+        {% else %}
+          <p class="empty">No missing skills — great job!</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- SUGGESTIONS -->
+    <div class="flashcard suggestions full">
+      <div class="flashcard-header">
+        <div class="flashcard-icon">💡</div>
+        <h3>Actionable Suggestions</h3>
+        <span class="count">{{ data.suggestions | length }}</span>
+      </div>
+      <div class="suggestion-list">
+        {% for s in data.suggestions %}
+          <div class="suggestion-item">
+            <div class="suggestion-num">{{ loop.index }}</div>
+            <p>{{ s }}</p>
+          </div>
+        {% else %}
+          <p class="empty">No suggestions available</p>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+  <a href="/ats" class="bottom-btn">🔄 Analyze Another Resume</a>
+
+</div>
+
+<script>
+  // Animate score ring
+  const circle = document.getElementById('scoreCircle');
+  const scoreNum = document.getElementById('scoreNum');
+  const score = parseInt(circle.dataset.score) || 0;
+  const circumference = 339.29;
+
+  setTimeout(() => {
+    const offset = circumference - (score / 100) * circumference;
+    circle.style.strokeDashoffset = offset;
+  }, 100);
+
+  // Count up number
+  let current = 0;
+  const duration = 1400;
+  const steps = score || 1;
+  const interval = duration / steps;
+
+  const timer = setInterval(() => {
+    current++;
+    scoreNum.textContent = current;
+    if (current >= score) clearInterval(timer);
+  }, interval);
+</script>
+
+</body>
+</html>

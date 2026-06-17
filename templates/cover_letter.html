@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cover Letter Generator – PrepAI</title>
+<style>
+  :root{
+    --green-50:  #f0fdf4;
+    --green-100: #dcfce7;
+    --green-200: #bbf7d0;
+    --green-400: #4ade80;
+    --green-500: #22c55e;
+    --green-600: #16a34a;
+    --green-700: #15803d;
+    --green-900: #064e3b;
+    --cream:     #ecffe0;
+    --white:     #ffffff;
+    --gray-400:  #9ca3af;
+    --gray-500:  #6b7280;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--cream);
+    color:var(--green-900);
+    font-family:'Sora',sans-serif;
+    min-height:100vh;
+  }
+  nav{
+    background:linear-gradient(135deg, #f0fdf4, var(--white));
+    border-bottom:1px solid var(--green-200);
+    padding:1rem 2rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 8px rgba(34,197,94,.08);
+  }
+  nav a{
+    color:var(--green-900);
+    text-decoration:none;
+    margin-left:1.5rem;
+    font-size:.9rem;
+    font-weight:600;
+    opacity:.8;
+    transition:.2s;
+  }
+  nav a:hover{opacity:1;color:var(--green-600);}
+  .logo{font-weight:800;font-size:1.2rem;color:var(--green-600);letter-spacing:-.5px;}
+  .page{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem;}
+  h1{font-size:1.8rem;font-weight:800;margin-bottom:.3rem;color:var(--green-900);}
+  .subtitle{color:var(--gray-500);margin-bottom:2rem;font-weight:300;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+  @media(max-width:650px){.grid2{grid-template-columns:1fr;}}
+  .panel{
+    background:var(--white);
+    border:1.5px solid var(--green-200);
+    border-radius:14px;
+    padding:1.5rem;
+    margin-bottom:1.5rem;
+    box-shadow:0 2px 8px rgba(34,197,94,.1);
+  }
+  label{
+    display:block;
+    font-size:.85rem;
+    color:var(--green-700);
+    margin-bottom:.4rem;
+    margin-top:.9rem;
+    font-weight:600;
+  }
+  input,textarea,select{
+    width:100%;
+    background:var(--white);
+    border:1.5px solid var(--green-200);
+    border-radius:8px;
+    color:var(--green-900);
+    padding:.7rem;
+    font-size:.9rem;
+    font-family:inherit;
+    resize:vertical;
+    transition:.2s;
+  }
+  input:focus,textarea:focus{
+    outline:none;
+    border-color:var(--green-500);
+    box-shadow:0 0 0 3px rgba(34,197,94,.1);
+  }
+  .btn{
+    display:inline-block;
+    padding:.8rem 1.8rem;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:600;
+    cursor:pointer;
+    border:none;
+    font-size:.95rem;
+    transition:.2s;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--green-500),var(--green-700));
+    color:#fff;
+  }
+  .btn-primary:hover{
+    transform:translateY(-1px);
+    box-shadow:0 4px 12px rgba(34,197,94,.3);
+  }
+  .btn-copy{
+    background:var(--white);
+    border:1.5px solid var(--green-200);
+    color:var(--green-700);
+    padding:.5rem 1rem;
+    font-size:.85rem;
+  }
+  .letter-box{
+    background:var(--green-50);
+    border:1.5px solid var(--green-200);
+    border-radius:10px;
+    padding:1.6rem;
+    line-height:1.8;
+    white-space:pre-wrap;
+    font-size:.93rem;
+    color:var(--green-900);
+    margin-top:1rem;
+    position:relative;
+    font-family:'Sora',serif;
+  }
+  .copy-btn{
+    position:absolute;
+    top:.8rem;
+    right:.8rem;
+    background:linear-gradient(135deg,var(--green-500),var(--green-700));
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    padding:.4rem .9rem;
+    cursor:pointer;
+    font-size:.8rem;
+    font-weight:600;
+  }
+  .copy-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 2px 8px rgba(34,197,94,.3);
+  }
+  .saved-list{display:flex;flex-direction:column;gap:.8rem;margin-top:1rem;}
+  .saved-item{
+    background:var(--green-50);
+    border:1.5px solid var(--green-200);
+    border-radius:8px;
+    padding:1rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition:.2s;
+  }
+  .saved-item:hover{border-color:var(--green-400);}
+  .saved-item-info{font-size:.9rem;color:var(--green-900);}
+  .saved-item-meta{font-size:.78rem;color:var(--gray-500);}
+  .flash{padding:.8rem 1.2rem;border-radius:8px;margin-bottom:1rem;font-size:.9rem;}
+  .flash-error{background:rgba(239,68,68,.12);border:1px solid #fca5a5;color:#991b1b;}
+  .flash-success{background:rgba(34,197,94,.12);border:1px solid #6ee7b7;color:var(--green-900);}
+  .flash-warning{background:rgba(245,158,11,.12);border:1px solid #fcd34d;color:#b45309;}
+</style>
+</head>
+<body>
+<nav>
+  <span class="logo">⚡ PrepAI</span>
+  <div>
+    <a href="/">Home</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/ats">ATS Check</a>
+    <a href="/logout">Logout</a>
+  </div>
+</nav>
+<div class="page">
+  <h1>📝 Cover Letter Generator</h1>
+  <p class="subtitle">AI-powered, tailored cover letters in seconds</p>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+      <div class="flash flash-{{cat}}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  <div class="panel">
+    <form method="POST">
+      <div class="grid2">
+        <div>
+          <label>Your Name</label>
+          <input name="name" value="{{ request.form.get('name', '') }}" required/>
+          <label>Role Applying For</label>
+          <input name="role" placeholder="e.g. Data Scientist" value="{{ request.form.get('role', '') }}" required/>
+          <label>Company Name</label>
+          <input name="company" placeholder="e.g. Google" value="{{ request.form.get('company', '') }}" required/>
+        </div>
+        <div>
+          <label>Job Description (paste key points)</label>
+          <textarea name="job_desc" rows="6" placeholder="Paste the job description here...">{{ request.form.get('job_desc', '') }}</textarea>
+        </div>
+      </div>
+      <label>Your Resume / Experience (optional – paste key highlights)</label>
+      <textarea name="resume_text" rows="4" placeholder="E.g. 2 years ML experience, built NLP pipeline at startup...">{{ request.form.get('resume_text', '') }}</textarea>
+      <button type="submit" class="btn btn-primary" style="margin-top:1.2rem">✨ Generate Cover Letter</button>
+    </form>
+  </div>
+
+  {% if letter %}
+  <div class="panel">
+    <h2 style="color:var(--green-400);margin-bottom:.5rem">Generated Cover Letter</h2>
+    <div class="letter-box" id="letterContent">{{ letter }}<button class="copy-btn" onclick="copyLetter()">📋 Copy</button></div>
+  </div>
+  {% endif %}
+
+  {% if saved %}
+  <div class="panel">
+    <h2 style="color:var(--green-300);margin-bottom:.5rem">Previous Letters</h2>
+    <div class="saved-list">
+    {% for s in saved %}
+    <div class="saved-item">
+      <div class="saved-item-info">
+        <strong>{{ s.role }}</strong> at {{ s.company }}
+        <div class="saved-item-meta">{{ s.created_at.strftime('%Y-%m-%d') }}</div>
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+<script>
+function copyLetter(){
+  const text = document.getElementById('letterContent').innerText.replace('📋 Copy','').trim();
+  navigator.clipboard.writeText(text).then(()=>alert('Copied!'));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Job Results | InterviewPro AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --green-50:#f0fdf4; --green-100:#dcfce7; --green-200:#bbf7d0;
+  --green-400:#4ade80; --green-500:#22c55e; --green-600:#16a34a;
+  --green-700:#15803d; --green-900:#064e3b;
+  --cream:#ecffe0; --white:#ffffff;
+  --gray-400:#9ca3af; --gray-500:#6b7280;
+}
+body { font-family:'Sora',sans-serif; min-height:100vh; overflow-x:hidden; color:var(--green-900); position:relative; }
+body::before { content:""; position:fixed; top:0; left:0; width:50%; height:100%; background:var(--cream); z-index:-2; }
+body::after  { content:""; position:fixed; top:0; right:0; width:50%; height:100%; background:var(--white); z-index:-2; }
+.blob { position:fixed; border-radius:50%; filter:blur(90px); opacity:.15; pointer-events:none; z-index:-1; }
+.blob-1 { width:500px; height:500px; background:var(--green-400); top:-120px; left:-100px; }
+.blob-2 { width:360px; height:360px; background:var(--green-500); bottom:-60px; right:-60px; }
+.header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:22px 40px; backdrop-filter:blur(12px);
+  background:rgba(236,255,224,.85); border-bottom:1px solid rgba(34,197,94,.12);
+  position:sticky; top:0; z-index:100;
+}
+.logo { font-weight:800; font-size:22px; color:var(--green-600); letter-spacing:-.5px; }
+.logo span { color:var(--green-900); }
+.hright { display:flex; gap:10px; }
+.pill-btn {
+  display:inline-flex; align-items:center; gap:8px; padding:9px 20px;
+  border-radius:100px; border:1.5px solid var(--green-200); background:transparent;
+  color:var(--green-700); font-family:'Sora',sans-serif; font-size:13px; font-weight:600;
+  cursor:pointer; text-decoration:none; transition:.25s;
+}
+.pill-btn:hover { background:var(--green-100); border-color:var(--green-400); }
+.pill-btn.solid {
+  background:linear-gradient(135deg,var(--green-500),var(--green-700));
+  color:#fff; border-color:transparent; box-shadow:0 4px 14px rgba(34,197,94,.3);
+}
+.pill-btn.solid:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(34,197,94,.4); }
+.page { max-width:1100px; margin:0 auto; padding:52px 32px 80px; }
+.page-header { text-align:center; margin-bottom:40px; animation:fadeUp .5s ease both; }
+.eyebrow {
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--green-100); border:1px solid var(--green-200); border-radius:100px;
+  padding:6px 16px; font-size:11px; font-weight:700; color:var(--green-700);
+  letter-spacing:.6px; text-transform:uppercase; margin-bottom:16px;
+}
+.page-header h1 { font-size:clamp(28px,3.5vw,44px); font-weight:800; color:var(--green-900); letter-spacing:-1.5px; line-height:1.1; margin-bottom:10px; }
+.page-header h1 em { font-style:normal; background:linear-gradient(135deg,var(--green-500),var(--green-700)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.page-header p { font-size:14px; color:var(--gray-400); font-weight:300; }
+.skills-card { background:var(--white); border:1.5px solid var(--green-100); border-radius:20px; padding:22px 26px; margin-bottom:32px; box-shadow:0 4px 20px rgba(34,197,94,.06); animation:fadeUp .5s .1s ease both; }
+.skills-card .lbl { font-size:11px; font-weight:700; color:var(--green-700); letter-spacing:.6px; text-transform:uppercase; margin-bottom:8px; }
+.skills-card p { font-size:13.5px; color:var(--gray-500); line-height:1.7; font-weight:300; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }
+.job-card { background:var(--white); border:1.5px solid var(--green-100); border-radius:20px; padding:22px 22px 18px; display:flex; flex-direction:column; gap:12px; box-shadow:0 2px 12px rgba(34,197,94,.04); transition:border-color .25s,transform .25s,box-shadow .25s; animation:fadeUp .5s ease both; }
+.job-card:hover { border-color:var(--green-400); transform:translateY(-4px); box-shadow:0 10px 30px rgba(34,197,94,.12); }
+.card-top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+.card-title { font-size:15px; font-weight:700; color:var(--green-900); margin-bottom:4px; line-height:1.3; }
+.card-co { font-size:12px; font-weight:600; color:var(--green-600); margin-bottom:2px; }
+.card-loc { font-size:11px; color:var(--gray-400); font-weight:300; }
+.match-badge { flex-shrink:0; background:linear-gradient(135deg,var(--green-500),var(--green-700)); color:#fff; font-size:11px; font-weight:700; padding:4px 12px; border-radius:100px; box-shadow:0 3px 10px rgba(34,197,94,.3); white-space:nowrap; }
+.salary-tag { display:inline-flex; align-items:center; gap:5px; background:var(--green-50); border:1px solid var(--green-200); border-radius:100px; padding:4px 12px; font-size:11px; font-weight:600; color:var(--green-700); width:fit-content; }
+.card-footer { display:flex; gap:8px; margin-top:4px; }
+.btn-apply { flex:1; padding:11px 14px; border-radius:12px; background:linear-gradient(135deg,var(--green-500),var(--green-700)); color:#fff; text-decoration:none; text-align:center; font-family:'Sora',sans-serif; font-size:13px; font-weight:700; box-shadow:0 4px 14px rgba(34,197,94,.3); transition:.25s; }
+.btn-apply:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(34,197,94,.4); }
+.btn-bm { padding:10px 13px; border-radius:12px; border:1.5px solid var(--green-200); background:transparent; cursor:pointer; font-size:16px; line-height:1; transition:.25s; }
+.btn-bm:hover { background:var(--green-100); border-color:var(--green-400); }
+.btn-bm.saved { border-color:#f59e0b; background:#fffbeb; }
+.empty { text-align:center; padding:80px 20px; color:var(--gray-400); animation:fadeUp .5s ease both; }
+.empty div { font-size:52px; margin-bottom:16px; }
+.empty p { font-size:15px; font-weight:300; }
+.toast { position:fixed; bottom:32px; right:32px; background:var(--green-700); color:#fff; padding:12px 22px; border-radius:100px; font-size:13px; font-weight:600; box-shadow:0 8px 24px rgba(34,197,94,.3); display:none; z-index:999; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-thumb{background:var(--green-200);border-radius:10px}
+@media(max-width:640px){.header{padding:16px 20px}.page{padding:32px 16px 60px}}
+</style>
+</head>
+<body>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+<header class="header">
+  <div class="logo">Interview<span>Pro</span> AI</div>
+  <div class="hright">
+    <a href="/saved_jobs" class="pill-btn solid">🔖 Saved Jobs</a>
+    <a href="/job" class="pill-btn">⬅ Search Again</a>
+  </div>
+</header>
+<div class="page">
+  <div class="page-header">
+    <div class="eyebrow">✦ Job Results</div>
+    <h1>Your <em>Job Matches</em></h1>
+    <p>Curated results based on your resume and preferences</p>
+  </div>
+  {% if skills %}
+  <div class="skills-card">
+    <div class="lbl">📌 Skills extracted from your resume</div>
+    <p>{{ skills }}</p>
+  </div>
+  {% endif %}
+  {% if jobs %}
+  <div class="grid">
+    {% for job in jobs %}
+    <div class="job-card" id="card-{{ job.id }}" data-delay="{{ loop.index0 * 0.07 }}">
+      <div class="card-top">
+        <div>
+          <div class="card-title">{{ job.title }}</div>
+          <div class="card-co">🏢 {{ job.company }}</div>
+          <div class="card-loc">📍 {{ job.location }}</div>
+        </div>
+        {% if job.match and job.match != '—' %}<span class="match-badge">{{ job.match }}</span>{% endif %}
+      </div>
+      {% if job.salary %}<div class="salary-tag">💰 ₹{{ job.salary | int }}/yr</div>{% endif %}
+      <div class="card-footer">
+        <a href="{{ job.url }}" target="_blank" class="btn-apply">Apply Now →</a>
+        <button class="btn-bm {% if job.saved %}saved{% endif %}" id="bm-{{ job.id }}" data-job="{{ job.id }}" onclick="toggleSave(this)">
+          {{ '🔖' if job.saved else '🤍' }}</button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <!-- htmlhint attr-unsafe-chars:true -->
+  {% else %}
+  <div class="empty"><div>🔍</div><p>No jobs found. Try a different role or location.</p></div>
+  {% endif %}
+</div>
+<div class="toast" id="toast" data-job-saves='{{ jobs_saves|tojson }}'></div>
+<script>
+  // Apply animation delays from data attributes
+  document.querySelectorAll('[data-delay]').forEach(el => {
+    el.style.animationDelay = el.dataset.delay + 's';
+  });
+  // Store job save states from data attribute to avoid template syntax in code
+  const ss = JSON.parse(document.getElementById('toast').dataset.jobSaves || '{}');
+  function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2500);}
+  async function toggleSave(btn){
+    const card = btn.closest('.job-card');
+    if (!card) {
+      showToast('❌ Error: Could not find job card');
+      return;
+    }
+    const id = card.id.replace('card-', '');
+    const title = card.querySelector('.card-title').textContent;
+    const company = card.querySelector('.card-co').textContent.replace('🏢 ', '');
+    const location = card.querySelector('.card-loc').textContent.replace('📍 ', '');
+    const url = card.querySelector('.btn-apply').href;
+    
+    const isSaved = ss[id];
+    const action = isSaved ? 'unsave' : 'save';
+    try{
+      const res = await fetch('/api/save_job', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({job_id: id, action, title, company, location, url})
+      });
+      if(res.status === 401){
+        showToast('⚠️ Please log in to save jobs');
+        return;
+      }
+      const data = await res.json();
+      if(data.status === 'ok'){
+        ss[id] = !isSaved;
+        btn.textContent = ss[id] ? '🔖' : '🤍';
+        btn.classList.toggle('saved', ss[id]);
+        showToast(ss[id] ? '🔖 Job saved!' : '🗑️ Removed');
+      }
+    }catch(e){
+      showToast('❌ Error saving job');
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Saved Jobs | InterviewPro AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--green-50:#f0fdf4;--green-100:#dcfce7;--green-200:#bbf7d0;--green-400:#4ade80;--green-500:#22c55e;--green-600:#16a34a;--green-700:#15803d;--green-900:#064e3b;--cream:#ecffe0;--white:#ffffff;--gray-400:#9ca3af;--gray-500:#6b7280}
+body{font-family:'Sora',sans-serif;min-height:100vh;overflow-x:hidden;color:var(--green-900);position:relative}
+body::before{content:"";position:fixed;top:0;left:0;width:50%;height:100%;background:var(--cream);z-index:-2}
+body::after{content:"";position:fixed;top:0;right:0;width:50%;height:100%;background:var(--white);z-index:-2}
+.blob{position:fixed;border-radius:50%;filter:blur(90px);opacity:.15;pointer-events:none;z-index:-1}
+.blob-1{width:500px;height:500px;background:var(--green-400);top:-120px;left:-100px}
+.blob-2{width:360px;height:360px;background:var(--green-500);bottom:-60px;right:-60px}
+.header{display:flex;align-items:center;justify-content:space-between;padding:22px 40px;backdrop-filter:blur(12px);background:rgba(236,255,224,.85);border-bottom:1px solid rgba(34,197,94,.12);position:sticky;top:0;z-index:100}
+.logo{font-weight:800;font-size:22px;color:var(--green-600);letter-spacing:-.5px}
+.logo span{color:var(--green-900)}
+.pill-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;border-radius:100px;border:1.5px solid var(--green-200);background:transparent;color:var(--green-700);font-family:'Sora',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:.25s}
+.pill-btn:hover{background:var(--green-100);border-color:var(--green-400)}
+.page{max-width:1000px;margin:0 auto;padding:52px 32px 80px}
+.page-header{text-align:center;margin-bottom:40px;animation:fadeUp .5s ease both}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--green-100);border:1px solid var(--green-200);border-radius:100px;padding:6px 16px;font-size:11px;font-weight:700;color:var(--green-700);letter-spacing:.6px;text-transform:uppercase;margin-bottom:16px}
+.page-header h1{font-size:clamp(28px,3.5vw,42px);font-weight:800;color:var(--green-900);letter-spacing:-1.5px;line-height:1.1;margin-bottom:10px}
+.page-header h1 em{font-style:normal;background:linear-gradient(135deg,var(--green-500),var(--green-700));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-header p{font-size:14px;color:var(--gray-400);font-weight:300}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.job-card{background:var(--white);border:1.5px solid var(--green-100);border-radius:20px;padding:22px 22px 18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 2px 12px rgba(34,197,94,.04);transition:border-color .25s,transform .25s,box-shadow .25s;animation:fadeUp .5s ease both}
+.job-card:hover{border-color:var(--green-400);transform:translateY(-4px);box-shadow:0 10px 30px rgba(34,197,94,.12)}
+.card-title{font-size:15px;font-weight:700;color:var(--green-900);margin-bottom:4px;line-height:1.3}
+.card-co{font-size:12px;font-weight:600;color:var(--green-600);margin-bottom:2px}
+.card-loc{font-size:11px;color:var(--gray-400);font-weight:300}
+.card-date{font-size:11px;color:var(--gray-400);font-weight:300;margin-top:2px}
+.card-footer{display:flex;gap:8px;margin-top:4px}
+.btn-apply{flex:1;padding:11px 14px;border-radius:12px;background:linear-gradient(135deg,var(--green-500),var(--green-700));color:#fff;text-decoration:none;text-align:center;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;box-shadow:0 4px 14px rgba(34,197,94,.3);transition:.25s}
+.btn-apply:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(34,197,94,.4)}
+.btn-remove{padding:10px 13px;border-radius:12px;border:1.5px solid #fecdd3;background:transparent;color:#dc2626;cursor:pointer;font-size:13px;font-weight:600;font-family:'Sora',sans-serif;transition:.25s}
+.btn-remove:hover{background:#fff1f2;border-color:#dc2626}
+.empty{text-align:center;padding:80px 20px;color:var(--gray-400);animation:fadeUp .5s ease both}
+.empty div{font-size:52px;margin-bottom:16px}
+.empty p{font-size:15px;font-weight:300;margin-bottom:20px}
+.empty a{color:var(--green-600);font-weight:600;text-decoration:none}
+.toast{position:fixed;bottom:32px;right:32px;background:#dc2626;color:#fff;padding:12px 22px;border-radius:100px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(220,38,38,.3);display:none;z-index:999}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--green-200);border-radius:10px}
+@media(max-width:640px){.header{padding:16px 20px}.page{padding:32px 16px 60px}}
+</style>
+</head>
+<body>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+<header class="header">
+  <div class="logo">Interview<span>Pro</span> AI</div>
+  <a href="/job" class="pill-btn">⬅ Find More Jobs</a>
+</header>
+<div class="page">
+  <div class="page-header">
+    <div class="eyebrow">🔖 Bookmarks</div>
+    <h1>Your <em>Saved Jobs</em></h1>
+    <p>Jobs you've bookmarked to apply to later</p>
+  </div>
+  {% if jobs %}
+  <div class="grid">
+    {% for job in jobs %}
+    <div class="job-card" id="card-{{ job['job_id'] }}" data-delay="{{ loop.index0 * 0.07 }}">
+      <div>
+        <div class="card-title">{{ job['title'] }}</div>
+        <div class="card-co">🏢 {{ job['company'] }}</div>
+        <div class="card-loc">📍 {{ job['location'] }}</div>
+        <div class="card-date">Saved {{ job['saved_at'].strftime('%Y-%m-%d') if job['saved_at'] else 'Recently' }}</div>
+      </div>
+      <div class="card-footer">
+        <a href="{{ job['url'] }}" target="_blank" class="btn-apply">Apply Now →</a>
+        <button class="btn-remove" data-job-id="{{ job['job_id'] }}" onclick="removeJob(this.getAttribute('data-job-id'))">🗑️ Remove</button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty">
+    <div>🔖</div>
+    <p>No saved jobs yet.</p>
+    <a href="/job">Browse jobs →</a>
+  </div>
+  {% endif %}
+</div>
+<div class="toast" id="toast"></div>
+<script>
+  // Apply animation delays from data attributes
+  document.querySelectorAll('[data-delay]').forEach(el => {
+    el.style.animationDelay = el.dataset.delay + 's';
+  });
+  async function removeJob(id){
+    const res=await fetch('/api/save_job',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({job_id:id,action:'unsave'})});
+    const data=await res.json();
+    if(data.status==='ok'){
+      document.getElementById('card-'+id).remove();
+      const t=document.getElementById('toast');t.textContent='🗑️ Job removed';t.style.display='block';setTimeout(()=>t.style.display='none',2000);
+    }
+  }
+</script>
+</body>
+</html>

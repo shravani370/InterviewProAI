@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InterviewPro AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green-50:  #f0fdf4;
+  --green-100: #dcfce7;
+  --green-200: #bbf7d0;
+  --green-400: #4ade80;
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+  --green-700: #15803d;
+  --green-900: #064e3b;
+  --cream:     #ecffe0;
+  --white:     #ffffff;
+  --gray-400:  #9ca3af;
+  --gray-500:  #6b7280;
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--green-900);
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed; top: 0; left: 0;
+  width: 50%; height: 100%;
+  background: var(--cream);
+  z-index: -2;
+}
+body::after {
+  content: "";
+  position: fixed; top: 0; right: 0;
+  width: 50%; height: 100%;
+  background: var(--white);
+  z-index: -2;
+}
+
+.blob {
+  position: fixed; border-radius: 50%;
+  filter: blur(90px); opacity: .15; pointer-events: none; z-index: -1;
+}
+.blob-1 { width: 500px; height: 500px; background: var(--green-400); top: -120px; left: -100px; }
+.blob-2 { width: 360px; height: 360px; background: var(--green-500); bottom: -60px; right: -60px; }
+
+/* HEADER */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 40px;
+  backdrop-filter: blur(12px);
+  background: rgba(236,255,224,.92);
+  border-bottom: 1px solid rgba(34,197,94,.12);
+  position: sticky; top: 0; z-index: 100;
+}
+
+.logo { font-weight: 800; font-size: 22px; color: var(--green-600); letter-spacing: -.5px; }
+.logo span { color: var(--green-900); }
+
+.header-right { position: relative; }
+
+.login-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 20px; border-radius: 100px;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  color: var(--white); font-family: 'Sora', sans-serif;
+  font-size: 13px; font-weight: 700; border: none; cursor: pointer;
+  text-decoration: none; transition: .25s;
+}
+.login-btn:hover { opacity: .88; transform: translateY(-1px); }
+
+.user-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 20px; border-radius: 100px;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  color: var(--white); font-family: 'Sora', sans-serif;
+  font-size: 13px; font-weight: 700; cursor: pointer; transition: .25s;
+}
+.user-badge:hover { opacity: .88; }
+
+.dropdown {
+  display: none;
+  position: absolute; top: calc(100% + 10px); right: 0;
+  background: var(--white); border-radius: 14px;
+  border: 1px solid var(--green-100);
+  box-shadow: 0 8px 30px rgba(34,197,94,.15);
+  min-width: 160px; overflow: hidden; z-index: 200;
+}
+.dropdown.open { display: block; }
+.dropdown div {
+  padding: 12px 16px; font-size: 13px; font-weight: 600;
+  color: var(--green-900); cursor: pointer; transition: .15s;
+}
+.dropdown div:hover { background: var(--green-50); }
+.dropdown div.danger { color: #dc2626; }
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 72px 20px 52px;
+}
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--green-100); border: 1px solid var(--green-200);
+  border-radius: 100px; padding: 6px 16px;
+  font-size: 11px; font-weight: 700; color: var(--green-700);
+  letter-spacing: .6px; text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800; color: var(--green-900);
+  letter-spacing: -2px; line-height: 1.12; margin-bottom: 18px;
+}
+
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero > p {
+  font-size: 15px; color: var(--gray-500); font-weight: 300;
+  max-width: 480px; margin: 0 auto 36px; line-height: 1.75;
+}
+
+/* SEARCH ROW */
+.search-row {
+  display: flex; align-items: center; gap: 10px;
+  max-width: 480px; margin: 0 auto 14px;
+}
+
+.search-row input {
+  flex: 1; padding: 14px 20px; border-radius: 12px;
+  border: 1.5px solid var(--green-200); background: var(--white);
+  font-family: 'Sora', sans-serif; font-size: 14px; color: var(--green-900);
+  outline: none; transition: .2s;
+}
+.search-row input::placeholder { color: var(--gray-400); font-weight: 300; }
+.search-row input:focus {
+  border-color: var(--green-500);
+  box-shadow: 0 0 0 4px rgba(34,197,94,.1);
+}
+
+.go-btn {
+  padding: 14px 22px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  color: var(--white); font-family: 'Sora', sans-serif;
+  font-weight: 700; font-size: 14px; border: none;
+  cursor: pointer; transition: .25s; white-space: nowrap;
+}
+.go-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(34,197,94,.35); }
+.go-btn:active { transform: scale(.97); }
+
+/* MODE BTNS */
+.mode-btns { display: flex; gap: 10px; justify-content: center; }
+
+.mode-btn {
+  padding: 10px 22px; border-radius: 100px;
+  border: 1.5px solid var(--green-200); background: var(--white);
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600;
+  color: var(--green-700); cursor: pointer; transition: .25s;
+}
+.mode-btn:hover { background: var(--green-100); border-color: var(--green-400); }
+.mode-btn.active { background: var(--green-100); border-color: var(--green-400); }
+
+/* SCREENING NOTICE */
+.screening-notice {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--green-100); border: 1px solid var(--green-200);
+  border-radius: 100px; padding: 7px 18px;
+  font-size: 12px; font-weight: 600; color: var(--green-700);
+  margin-top: 14px; margin-bottom: 2px;
+}
+
+/* SECTION */
+.section { padding: 0 40px 52px; max-width: 1040px; margin: 0 auto; }
+
+.section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .8px;
+  text-transform: uppercase; color: var(--green-600); margin-bottom: 16px;
+}
+
+/* ROLE GRID */
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap: 10px;
+}
+
+.role-card {
+  background: var(--white); border: 1px solid var(--green-100);
+  border-radius: 14px; padding: 14px 16px;
+  text-align: center; cursor: pointer; transition: .25s;
+  font-size: 13px; font-weight: 600; color: var(--green-900);
+}
+.role-card:hover {
+  border-color: var(--green-400); background: var(--green-50);
+  transform: translateY(-3px); box-shadow: 0 4px 16px rgba(34,197,94,.1);
+}
+.role-card.selected {
+  border-color: var(--green-500); background: var(--green-50);
+  box-shadow: 0 0 0 3px rgba(34,197,94,.12);
+}
+
+/* FEATURE CARDS */
+.feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.feature-card {
+  background: var(--white); border: 1px solid var(--green-100);
+  border-radius: 20px; padding: 24px 22px;
+  cursor: pointer; transition: .25s;
+}
+.feature-card:hover {
+  border-color: var(--green-400); transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(34,197,94,.12);
+}
+
+.feature-icon {
+  width: 48px; height: 48px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 14px;
+  box-shadow: 0 4px 14px rgba(34,197,94,.28);
+}
+
+.feature-card h3 { font-size: 16px; font-weight: 800; color: var(--green-900); margin-bottom: 6px; }
+.feature-card p  { font-size: 13px; color: var(--gray-500); font-weight: 300; line-height: 1.6; }
+
+/* FOOTER */
+footer {
+  background: linear-gradient(135deg, #022c22, var(--green-900));
+  color: #d1fae5; padding: 50px 40px 20px;
+  border-top: 2px solid var(--green-500);
+  margin-top: 40px;
+}
+
+.footer-inner {
+  display: flex; justify-content: space-between; flex-wrap: wrap;
+  gap: 40px; max-width: 1040px; margin: 0 auto 30px;
+}
+
+.footer-section { flex: 1; min-width: 200px; }
+.footer-section h2 { font-size: 22px; color: var(--green-400); margin-bottom: 8px; font-weight: 800; }
+.footer-section h3 { font-size: 15px; color: var(--green-500); margin-bottom: 8px; font-weight: 700; }
+.footer-section p,
+.footer-section li { font-size: 13px; color: #bbf7d0; line-height: 1.8; font-weight: 300; }
+.footer-section ul { list-style: none; padding: 0; }
+
+.footer-bottom {
+  text-align: center; border-top: 1px solid #065f46;
+  padding-top: 14px; font-size: 12px; color: #6ee7b7;
+  max-width: 1040px; margin: 0 auto;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--green-200); border-radius: 10px; }
+
+@media (max-width: 640px) {
+  .feature-grid { grid-template-columns: 1fr; }
+  .header { padding: 16px 20px; }
+  .section { padding: 0 20px 40px; }
+  .hero { padding: 48px 20px 36px; }
+  .search-row { flex-direction: column; }
+  .search-row input { width: 100%; }
+  footer { padding: 40px 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<header class="header">
+  <div class="logo">Interview<span>Pro</span> AI</div>
+  <div class="header-right">
+    {% if user %}
+      <div class="user-badge" id="userBadge" onclick="toggleMenu()">
+        👤 {{ user }}
+      </div>
+      <div class="dropdown" id="menu">
+        <div onclick="window.location.href='/dashboard'">📊 Dashboard</div>
+        <div onclick="window.location.href='/profile'">👤 Profile</div>
+        <div class="danger" onclick="window.location.href='/logout'">🚪 Logout</div>
+      </div>
+    {% else %}
+      <a href="/google-login" class="login-btn">Continue with Google</a>
+    {% endif %}
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">✦ AI-Powered Career Platform</div>
+  <h1>Land your dream role<br>with <em>smarter</em> practice.</h1>
+  <p>Role-specific mock interviews, instant feedback, resume analysis, and real job matching — all in one place.</p>
+
+  <div class="search-row">
+    <input type="text" id="roleInput" placeholder="Enter a role (e.g. Data Analyst)">
+    <button class="go-btn" onclick="startInterview()">Let's go →</button>
+  </div>
+
+  <div class="mode-btns">
+    <button class="mode-btn active" id="chatBtn" onclick="setMode('chat')">💬 Chat Interview</button>
+    <button class="mode-btn" id="videoBtn" onclick="setMode('video')">🎥 Video Interview</button>
+  </div>
+
+  <!-- ✅ NEW: informs users about the screening flow -->
+  <div class="screening-notice">
+    🛡️ MCQ + Coding screening required before interview
+  </div>
+</section>
+
+<div class="section">
+  <div class="section-label">Technical roles — click to select</div>
+  <div class="role-grid" id="roleGrid"></div>
+</div>
+
+<div class="section">
+  <div class="section-label">More tools</div>
+  <div class="feature-grid">
+    <div class="feature-card" onclick="window.location.href='/dashboard'">
+      <div class="feature-icon">📊</div>
+      <h3>Dashboard</h3>
+      <p>Track your performance, screening history, and saved jobs.</p>
+    </div>
+    <div class="feature-card" onclick="window.location.href='/resume_suite'">
+      <div class="feature-icon">📄</div>
+      <h3>Resume Suite</h3>
+      <p>Builder, analyzer and ATS optimizer in one unified workspace.</p>
+    </div>
+    <div class="feature-card" onclick="window.location.href='/ats'">
+      <div class="feature-icon">🔍</div>
+      <h3>ATS Checker</h3>
+      <p>Check if your resume passes ATS filters for any job description.</p>
+    </div>
+    <div class="feature-card" onclick="window.location.href='/job'">
+      <div class="feature-icon">💼</div>
+      <h3>Job Match</h3>
+      <p>Find real open roles and apply instantly with your matched profile.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-section">
+      <h2>InterviewPro AI</h2>
+      <p>Smart platform for interview practice, resume analysis, and job matching.</p>
+    </div>
+    <div class="footer-section">
+      <h3>Features</h3>
+      <ul>
+        <li>AI Mock Interviews</li>
+        <li>Resume Analysis</li>
+        <li>Job Matching</li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3>Developed By</h3>
+      <p>Shravani Sushil Kharwadkar (2024BIT029)</p>
+      <p>Nandini Rajaram Chintewad (2024BIT031)</p>
+      <p>I.T. Second Year · SGGS IE&T</p>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2024 InterviewPro AI · Built with ♥ by Shravani &amp; Nandini</div>
+</footer>
+
+<script>
+var roles = [
+  'Software Engineer', 'Data Analyst', 'Data Scientist',
+  'ML Engineer', 'Full Stack Developer', 'Frontend Developer',
+  'Backend Developer', 'DevOps Engineer', 'Cybersecurity Analyst', 'Android Developer'
+];
+var currentMode = 'chat';
+
+var grid = document.getElementById('roleGrid');
+roles.forEach(function(r) {
+  var el = document.createElement('div');
+  el.className = 'role-card';
+  el.textContent = r;
+  el.addEventListener('click', function() {
+    document.getElementById('roleInput').value = r;
+    document.querySelectorAll('.role-card').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+  });
+  grid.appendChild(el);
+});
+
+function setMode(m) {
+  currentMode = m;
+  document.getElementById('chatBtn').classList.toggle('active', m === 'chat');
+  document.getElementById('videoBtn').classList.toggle('active', m === 'video');
+}
+
+function startInterview() {
+  var role = document.getElementById('roleInput').value.trim();
+  if (!role) {
+    var inp = document.getElementById('roleInput');
+    inp.style.borderColor = '#f87171';
+    inp.focus();
+    setTimeout(function() { inp.style.borderColor = ''; }, 2000);
+    return;
+  }
+  // ✅ CHANGED: routes through screening levels before /start
+  window.location.href = '/screening/level1?mode=' + currentMode + '&role=' + encodeURIComponent(role);
+}
+
+function toggleMenu() {
+  var menu = document.getElementById('menu');
+  if (menu) menu.classList.toggle('open');
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.header-right')) {
+    var menu = document.getElementById('menu');
+    if (menu) menu.classList.remove('open');
+  }
+});
+</script>
+
+</body>
+</html>

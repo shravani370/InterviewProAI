@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume Builder | InterviewPro AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+/* ─── RESET & BASE ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green-50:  #f0fdf4;
+  --green-100: #dcfce7;
+  --green-200: #bbf7d0;
+  --green-400: #4ade80;
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+  --green-700: #15803d;
+  --green-900: #064e3b;
+  --cream:     #ecffe0;
+  --white:     #ffffff;
+  --gray-400:  #9ca3af;
+  --gray-500:  #6b7280;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-sm: 0 2px 12px rgba(34,197,94,.08);
+  --shadow-md: 0 6px 24px rgba(34,197,94,.14);
+  --shadow-lg: 0 12px 40px rgba(34,197,94,.2);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--cream);
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--green-900);
+}
+
+/* ─── BACKGROUND SPLIT ─────────────────────────────────── */
+body::before {
+  content: "";
+  position: fixed; top: 0; left: 0;
+  width: 50%; height: 100%;
+  background: var(--cream);
+  z-index: -2;
+}
+body::after {
+  content: "";
+  position: fixed; top: 0; right: 0;
+  width: 50%; height: 100%;
+  background: var(--white);
+  z-index: -2;
+}
+
+/* ─── DECORATIVE BLOBS ─────────────────────────────────── */
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: .18;
+  pointer-events: none;
+  z-index: -1;
+}
+.blob-1 { width: 400px; height: 400px; background: var(--green-400); top: -80px; left: -80px; }
+.blob-2 { width: 300px; height: 300px; background: var(--green-500); bottom: 80px; right: -60px; }
+
+/* ─── HEADER ───────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 40px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  background: rgba(236,255,224,.85);
+  border-bottom: 1px solid rgba(34,197,94,.12);
+}
+
+.logo { font-weight: 800; font-size: 22px; color: var(--green-600); letter-spacing: -.5px; }
+.logo span { color: var(--green-900); }
+
+.header-actions { display: flex; gap: 10px; }
+
+.header-btn {
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .25s;
+  border: none;
+  text-decoration: none;
+}
+
+.header-btn.ghost {
+  background: transparent;
+  border: 1.5px solid var(--green-200);
+  color: var(--green-700);
+}
+.header-btn.ghost:hover { background: var(--green-100); border-color: var(--green-400); }
+
+.header-btn.primary {
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  color: white;
+  box-shadow: 0 4px 14px rgba(34,197,94,.3);
+}
+.header-btn.primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+
+/* ─── HERO ─────────────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: 56px 20px 40px;
+  animation: fadeDown .55s ease both;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--green-100);
+  border: 1px solid var(--green-200);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green-700);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800;
+  color: var(--green-900);
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  margin-bottom: 12px;
+}
+
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--green-500), var(--green-700));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  color: var(--gray-500);
+  font-size: 15px;
+  font-weight: 300;
+  max-width: 420px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ─── STEP STRIP ───────────────────────────────────────── */
+.steps-strip {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  max-width: 700px;
+  margin: 0 auto 44px;
+  padding: 0 20px;
+  animation: fadeDown .55s ease .1s both;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-400);
+  transition: .3s;
+  cursor: default;
+  position: relative;
+}
+
+.step.active {
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  color: var(--green-700);
+  border: 1px solid var(--green-200);
+}
+
+.step-dot {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  background: var(--green-100);
+  color: var(--green-700);
+  flex-shrink: 0;
+}
+
+.step.active .step-dot {
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  color: white;
+}
+
+.step-connector {
+  width: 32px;
+  height: 2px;
+  background: var(--green-200);
+  align-self: center;
+  flex-shrink: 0;
+}
+
+/* ─── LAYOUT ───────────────────────────────────────────── */
+.form-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px 100px;
+}
+
+/* ─── SECTION CARD ─────────────────────────────────────── */
+.section-card {
+  background: var(--white);
+  border: 1px solid var(--green-100);
+  border-radius: var(--radius-lg);
+  padding: 32px 36px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  animation: fadeUp .5s ease both;
+  transition: box-shadow .3s, border-color .3s;
+}
+
+.section-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--green-200);
+}
+
+.section-card:nth-child(1) { animation-delay: .1s; }
+.section-card:nth-child(2) { animation-delay: .15s; }
+.section-card:nth-child(3) { animation-delay: .2s; }
+.section-card:nth-child(4) { animation-delay: .25s; }
+.section-card:nth-child(5) { animation-delay: .3s; }
+.section-card:nth-child(6) { animation-delay: .35s; }
+.section-card:nth-child(7) { animation-delay: .4s; }
+
+/* ─── SECTION HEADER ───────────────────────────────────── */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid var(--green-50);
+}
+
+.section-icon {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  background: var(--green-50);
+  border: 1px solid var(--green-200);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.section-header h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--green-900);
+}
+
+.section-header p {
+  font-size: 12px;
+  color: var(--gray-400);
+  margin-top: 2px;
+}
+
+/* ─── FIELD GRID ───────────────────────────────────────── */
+.field-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.field-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.field-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+@media (max-width: 640px) {
+  .field-grid.cols-2, .field-grid.cols-3 { grid-template-columns: 1fr; }
+}
+
+/* ─── FIELD ────────────────────────────────────────────── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green-700);
+  letter-spacing: .4px;
+  text-transform: uppercase;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--green-100);
+  border-radius: var(--radius-sm);
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  color: var(--green-900);
+  background: var(--green-50);
+  outline: none;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+  resize: none;
+}
+
+.field input::placeholder,
+.field textarea::placeholder { color: var(--gray-400); font-weight: 300; }
+
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--green-400);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(34,197,94,.1);
+}
+
+/* ─── DYNAMIC BLOCKS ───────────────────────────────────── */
+.dynamic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dynamic-row {
+  position: relative;
+  background: var(--green-50);
+  border: 1.5px solid var(--green-100);
+  border-radius: var(--radius-md);
+  padding: 18px 20px 18px;
+  transition: border-color .2s, box-shadow .2s;
+  animation: popIn .3s ease both;
+}
+
+.dynamic-row:hover {
+  border-color: var(--green-300, var(--green-200));
+  box-shadow: var(--shadow-sm);
+}
+
+.dynamic-row .row-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.dynamic-row .row-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+
+@media (max-width: 540px) {
+  .dynamic-row .row-grid.cols-2 { grid-template-columns: 1fr; }
+}
+
+.dynamic-row input,
+.dynamic-row textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--green-200);
+  border-radius: 8px;
+  font-family: 'Sora', sans-serif;
+  font-size: 13.5px;
+  color: var(--green-900);
+  background: var(--white);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  resize: vertical;
+}
+
+.dynamic-row input:focus,
+.dynamic-row textarea:focus {
+  border-color: var(--green-500);
+  box-shadow: 0 0 0 3px rgba(34,197,94,.1);
+}
+
+.dynamic-row textarea { min-height: 80px; }
+
+/* Remove button */
+.remove-btn {
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: #fee2e2;
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: .2s;
+  opacity: .6;
+}
+.remove-btn:hover { opacity: 1; transform: scale(1.1); }
+
+/* ─── ADD BUTTON ───────────────────────────────────────── */
+.add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 9px 18px;
+  border-radius: 100px;
+  border: 1.5px dashed var(--green-400);
+  background: transparent;
+  color: var(--green-700);
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.add-btn:hover {
+  background: var(--green-100);
+  border-style: solid;
+  border-color: var(--green-500);
+}
+
+.add-btn .plus {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--green-500);
+  color: white;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ─── SKILLS ───────────────────────────────────────────── */
+.skills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px;
+  border: 1.5px solid var(--green-100);
+  border-radius: var(--radius-sm);
+  background: var(--green-50);
+  cursor: text;
+  transition: border-color .2s;
+}
+
+.skills-wrap:focus-within {
+  border-color: var(--green-400);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(34,197,94,.1);
+}
+
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: var(--green-100);
+  border: 1px solid var(--green-200);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green-700);
+  animation: popIn .25s ease both;
+}
+
+.skill-tag button {
+  background: none;
+  border: none;
+  color: var(--green-500);
+  font-size: 14px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  display: flex; align-items: center;
+  transition: .15s;
+}
+.skill-tag button:hover { color: #dc2626; transform: scale(1.2); }
+
+.skill-input {
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 4px 6px !important;
+  min-width: 120px;
+  flex: 1;
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  color: var(--green-900);
+}
+
+.skill-input::placeholder { color: var(--gray-400); }
+
+/* Hidden real inputs container */
+.skills-hidden { display: none; }
+
+/* ─── SUBMIT SECTION ───────────────────────────────────── */
+.submit-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--white);
+  border: 1px solid var(--green-200);
+  border-radius: var(--radius-lg);
+  padding: 28px 36px;
+  box-shadow: var(--shadow-md);
+  animation: fadeUp .5s ease .45s both;
+}
+
+.submit-info h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--green-900);
+}
+
+.submit-info p {
+  font-size: 13px;
+  color: var(--gray-500);
+  margin-top: 4px;
+}
+
+.submit-actions { display: flex; gap: 10px; flex-shrink: 0; }
+
+.btn-tool {
+  padding: 11px 20px;
+  border-radius: 12px;
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .25s;
+  border: none;
+}
+
+.btn-tool.secondary {
+  background: var(--green-50);
+  border: 1.5px solid var(--green-200);
+  color: var(--green-700);
+}
+.btn-tool.secondary:hover { background: var(--green-100); border-color: var(--green-400); }
+
+.btn-generate {
+  padding: 14px 36px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  color: white;
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 6px 20px rgba(34,197,94,.35);
+  transition: .3s;
+  letter-spacing: -.2px;
+}
+
+.btn-generate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(34,197,94,.45);
+}
+
+.btn-generate:active { transform: scale(.97); }
+
+/* ─── ROW NUMBER BADGE ─────────────────────────────────── */
+.row-num {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green-500);
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  margin-bottom: 10px;
+}
+
+.row-num::before {
+  content: attr(data-n);
+  width: 20px; height: 20px;
+  border-radius: 6px;
+  background: var(--green-500);
+  color: white;
+  font-size: 11px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ─── ANIMATIONS ───────────────────────────────────────── */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ─── SCROLLBAR ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--green-200); border-radius: 10px; }
+
+/* ─── RESPONSIVE ───────────────────────────────────────── */
+@media (max-width: 640px) {
+  .header { padding: 16px 20px; }
+  .section-card { padding: 22px 20px; }
+  .submit-section { flex-direction: column; align-items: stretch; text-align: center; }
+  .submit-actions { justify-content: center; flex-wrap: wrap; }
+  .steps-strip { gap: 4px; }
+  .step span { display: none; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- BLOBS -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- ─── HEADER ───────────────────────────────────────── -->
+<header class="header">
+  <div class="logo">Interview<span>Pro</span> AI</div>
+  <div class="header-actions">
+    <a href="/ats" class="header-btn ghost">ATS Checker</a>
+    <a href="/analyze_page" class="header-btn ghost">Analyzer</a>
+    <a href="/" class="header-btn primary">⬅ Home</a>
+  </div>
+</header>
+
+<!-- ─── HERO ─────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-eyebrow">✦ Resume Builder</div>
+  <h1>Craft your <em>perfect</em><br>resume</h1>
+  <p>Fill in your details and we'll generate a clean, ATS-optimised resume in seconds.</p>
+</section>
+
+<!-- ─── STEP STRIP ─────────────────────────────────── -->
+<div class="steps-strip">
+  <div class="step active"><div class="step-dot">1</div><span>Profile</span></div>
+  <div class="step-connector"></div>
+  <div class="step active"><div class="step-dot">2</div><span>Experience</span></div>
+  <div class="step-connector"></div>
+  <div class="step active"><div class="step-dot">3</div><span>Skills</span></div>
+  <div class="step-connector"></div>
+  <div class="step active"><div class="step-dot">4</div><span>Generate</span></div>
+</div>
+
+<!-- ─── FORM ──────────────────────────────────────── -->
+<div class="form-wrap">
+<form action="/resume" method="POST" id="resumeForm">
+
+  <!-- 1. PERSONAL INFO -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-icon">👤</div>
+      <div>
+        <h2>Personal Information</h2>
+        <p>Your name, contact details and role</p>
+      </div>
+    </div>
+    <div class="field-grid cols-2">
+      <div class="field">
+        <label>Full Name</label>
+        <input name="name" placeholder="e.g. Arjun Sharma" autocomplete="name">
+      </div>
+      <div class="field">
+        <label>Target Role</label>
+        <input name="role" placeholder="e.g. Frontend Developer">
+      </div>
+      <div class="field">
+        <label>Phone</label>
+        <input name="phone" placeholder="+91 98765 43210" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input name="email" type="email" placeholder="arjun@email.com" autocomplete="email">
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>Address / Location</label>
+        <input name="address" placeholder="City, State, Country">
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>About / Summary</label>
+        <textarea name="about" rows="4" placeholder="A brief professional summary about yourself..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. LINKS -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-icon">🔗</div>
+      <div>
+        <h2>Links & Profiles</h2>
+        <p>LinkedIn, GitHub, portfolio, etc.</p>
+      </div>
+    </div>
+    <div class="dynamic-list" id="linksContainer">
+      <div class="dynamic-row">
+        <button type="button" class="remove-btn" onclick="removeRow(this)">×</button>
+        <div class="row-grid cols-2">
+          <input name="link_platform[]" placeholder="Platform — e.g. LinkedIn">
+          <input name="link_url[]" placeholder="URL — https://...">
+        </div>
+      </div>
+    </div>
+    <button type="button" class="add-btn" onclick="addLink()">
+      <span class="plus">+</span> Add Link
+    </button>
+  </div>
+
+  <!-- 3. EDUCATION -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-icon">🎓</div>
+      <div>
+        <h2>Education</h2>
+        <p>Degrees, institutions, years</p>
+      </div>
+    </div>
+    <div class="field">
+      <textarea name="education" rows="4" placeholder="B.Tech in Computer Science — XYZ University (2020–2024)&#10;Relevant coursework: Data Structures, Algorithms..."></textarea>
+    </div>
+  </div>
+
+  <!-- 4. EXPERIENCE -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-icon">💼</div>
+      <div>
+        <h2>Work Experience</h2>
+        <p>Roles, companies, achievements</p>
+      </div>
+    </div>
+    <div class="dynamic-list" id="expContainer">
+      <div class="dynamic-row">
+        <button type="button" class="remove-btn" onclick="removeRow(this)">×</button>
+        <div class="row-num" data-n="1">Experience 1</div>
+        <textarea name="experience[]" placeholder="Software Engineer at ABC Corp (Jan 2023 – Present)&#10;• Led development of X, improving performance by 40%&#10;• Collaborated with cross-functional teams..."></textarea>
+      </div>
+    </div>
+    <button type="button" class="add-btn" onclick="addExp()">
+      <span class="plus">+</span> Add Experience
+    </button>
+  </div>
+
+  <!-- 5. PROJECTS -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-icon">🚀</div>
+      <div>
+        <h2>Projects</h2>
+        <p>Personal, academic or open-source work</p>
+      </div>
+    </div>
+    <div class="dynamic-list" id="projContainer">
+      <div class="dynamic-row">
+        <button type="button" class="remove-btn" onclick="removeRow(this)">×</button>
+        <div class="row-num" data-n="1">Project 1</div>
+        <textarea name="projects[]" placeholder="Portfolio Website (React + TailwindCSS)&#10;• Built a fully responsive portfolio with dark mode&#10;• Live: https://yoursite.com"></textarea>
+      </div>
+    </div>
+    <button type="button" class="add-btn" onclick="addProj()">
+      <span class="plus">+</span> Add Project
+    </button>
+  </div>
+
+  <!-- 6. CERTIFICATIONS -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-icon">🏅</div>
+      <div>
+        <h2>Certifications</h2>
+        <p>Courses, licences and credentials</p>
+      </div>
+    </div>
+    <div class="dynamic-list" id="certContainer">
+      <div class="dynamic-row">
+        <button type="button" class="remove-btn" onclick="removeRow(this)">×</button>
+        <div class="row-grid cols-2">
+          <input name="cert_name[]" placeholder="Certificate Name">
+          <input name="cert_link[]" placeholder="Credential URL (optional)">
+        </div>
+      </div>
+    </div>
+    <button type="button" class="add-btn" onclick="addCert()">
+      <span class="plus">+</span> Add Certificate
+    </button>
+  </div>
+
+  <!-- 7. SKILLS TAG INPUT -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-icon">⚡</div>
+      <div>
+        <h2>Skills</h2>
+        <p>Type a skill and press Enter or comma to add</p>
+      </div>
+    </div>
+    <div class="skills-wrap" id="skillsWrap">
+      <input class="skill-input" id="skillInput" placeholder="e.g. React, Python, Figma…">
+    </div>
+    <div class="skills-hidden" id="skillsHidden"></div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <div class="submit-info">
+      <h3>Ready to generate?</h3>
+      <p>Your resume will be formatted and ready to download.</p>
+    </div>
+    <div class="submit-actions">
+      <button type="button" class="btn-tool secondary" onclick="window.location.href='/ats'">📊 ATS Check</button>
+      <button type="button" class="btn-tool secondary" onclick="window.location.href='/analyze_page'">🔍 Analyze</button>
+      <button type="submit" class="btn-generate">✨ Generate Resume</button>
+    </div>
+  </div>
+
+</form>
+</div>
+
+<!-- ─── SCRIPT ────────────────────────────────────────── -->
+<script>
+
+/* ── Generic remove row ── */
+function removeRow(btn) {
+  const row = btn.closest('.dynamic-row');
+  if (row.parentElement.querySelectorAll('.dynamic-row').length > 1) {
+    row.style.opacity = '0';
+    row.style.transform = 'scale(.95)';
+    row.style.transition = '.2s';
+    setTimeout(() => { row.remove(); renumberRows(); }, 200);
+  }
+}
+
+function renumberRows() {
+  document.querySelectorAll('.row-num').forEach((el, i) => {
+    const label = el.textContent.replace(/\d+/, '');
+    el.textContent = label + (i + 1);
+    el.dataset.n = i + 1;
+  });
+}
+
+/* ── Add Link ── */
+function addLink() {
+  const div = document.createElement('div');
+  div.className = 'dynamic-row';
+  div.innerHTML = `
+    <button type="button" class="remove-btn" onclick="removeRow(this)">×</button>
+    <div class="row-grid cols-2">
+      <input name="link_platform[]" placeholder="Platform — e.g. GitHub">
+      <input name="link_url[]" placeholder="URL — https://...">
+    </div>`;
+  linksContainer.appendChild(div);
+}
+
+/* ── Add Experience ── */
+function addExp() {
+  const n = expContainer.querySelectorAll('.dynamic-row').length + 1;
+  const div = document.createElement('div');
+  div.className = 'dynamic-row';
+  div.innerHTML = `
+    <button type="button" class="remove-btn" onclick="removeRow(this)">×</button>
+    <div class="row-num" data-n="${n}">Experience ${n}</div>
+    <textarea name="experience[]" placeholder="Role at Company (Period)&#10;• Key achievement..."></textarea>`;
+  expContainer.appendChild(div);
+}
+
+/* ── Add Project ── */
+function addProj() {
+  const n = projContainer.querySelectorAll('.dynamic-row').length + 1;
+  const div = document.createElement('div');
+  div.className = 'dynamic-row';
+  div.innerHTML = `
+    <button type="button" class="remove-btn" onclick="removeRow(this)">×</button>
+    <div class="row-num" data-n="${n}">Project ${n}</div>
+    <textarea name="projects[]" placeholder="Project Name (Tech Stack)&#10;• What you built..."></textarea>`;
+  projContainer.appendChild(div);
+}
+
+/* ── Add Cert ── */
+function addCert() {
+  const div = document.createElement('div');
+  div.className = 'dynamic-row';
+  div.innerHTML = `
+    <button type="button" class="remove-btn" onclick="removeRow(this)">×</button>
+    <div class="row-grid cols-2">
+      <input name="cert_name[]" placeholder="Certificate Name">
+      <input name="cert_link[]" placeholder="Credential URL (optional)">
+    </div>`;
+  certContainer.appendChild(div);
+}
+
+/* ── Skills Tag Input ── */
+const skillsWrap = document.getElementById('skillsWrap');
+const skillInput = document.getElementById('skillInput');
+const skillsHidden = document.getElementById('skillsHidden');
+
+skillsWrap.addEventListener('click', () => skillInput.focus());
+
+skillInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    addSkill();
+  }
+  if (e.key === 'Backspace' && skillInput.value === '') {
+    const tags = skillsWrap.querySelectorAll('.skill-tag');
+    if (tags.length) removeSkillTag(tags[tags.length - 1]);
+  }
+});
+
+function addSkill() {
+  const val = skillInput.value.replace(',', '').trim();
+  if (!val) return;
+  skillInput.value = '';
+
+  const tag = document.createElement('div');
+  tag.className = 'skill-tag';
+  tag.innerHTML = `${val}<button type="button" onclick="removeSkillTag(this.parentElement)">×</button>`;
+  skillsWrap.insertBefore(tag, skillInput);
+
+  const hidden = document.createElement('input');
+  hidden.type = 'hidden';
+  hidden.name = 'skills[]';
+  hidden.value = val;
+  hidden.className = 'skill-hidden-input';
+  skillsHidden.appendChild(hidden);
+}
+
+function removeSkillTag(tag) {
+  const val = tag.childNodes[0].textContent.trim();
+  tag.style.opacity = '0';
+  tag.style.transform = 'scale(.8)';
+  tag.style.transition = '.15s';
+  setTimeout(() => {
+    tag.remove();
+    const inputs = skillsHidden.querySelectorAll('.skill-hidden-input');
+    inputs.forEach(inp => { if (inp.value === val) inp.remove(); });
+  }, 150);
+}
+
+</script>
+</body>
+</html>

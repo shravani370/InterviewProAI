@@ -1,0 +1,85 @@
+.env
+.env.local
+.env.*.local
+
+# Database files
+__pycache__/
+*.pyc
+*.pyo
+*.db
+*.sqlite
+*.sqlite3
+users.db
+interview_proai.db
+postgres_data/
+redis_data/
+
+# Session and cache
+flask_session/
+.webassets-cache/
+
+# ═════════════════════════════════════════════════════════════════════════
+# Credentials and Secrets (CRITICAL - NEVER COMMIT)
+# ═════════════════════════════════════════════════════════════════════════
+# NOTE: client_secret.json was previously committed to git history.
+# See CREDENTIALS_SECURITY.md for how to handle the exposure.
+
+.env
+.env.local
+.env.*.local
+.env.*.prod
+
+# Google/OAuth credentials
+client_secret.json
+credentials.json
+service-account-*.json
+
+# API Keys and certificates
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# AWS credentials (if using local AWS CLI)
+.aws/credentials
+.aws/config
+
+# SSH keys
+id_rsa
+id_rsa.pub
+*.ppk
+
+# Docker/Kubernetes secrets
+.dockerenv
+secrets/
+*.yml.secret
+*.yaml.secret
+
+# OS and IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Uploads and temp files
+uploads/
+temp/
+tmp/
+
+# Logs
+*.log
+logs/
+
+# Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Interview Results – PrepAI</title>
+<style>
+  :root {
+    --green-50: #f0fdf4;
+    --green-100: #dcfce7;
+    --green-200: #bbf7d0;
+    --green-300: #86efac;
+    --green-400: #4ade80;
+    --green-500: #22c55e;
+    --green-600: #16a34a;
+    --green-700: #15803d;
+    --green-800: #166534;
+    --green-900: #064e3b;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --text: #ffffff;
+    --muted: #9ca3af;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--gray-800);color:var(--text);font-family:'Sora',sans-serif;min-height:100vh;}
+  nav{background:linear-gradient(135deg, var(--green-50) 0%, #ecffe0 100%);border-bottom:1px solid rgba(34,197,94,.2);padding:1rem 2rem;
+      display:flex;justify-content:space-between;align-items:center;}
+  nav a{color:var(--green-900);text-decoration:none;margin-left:1.5rem;font-size:.9rem;opacity:.8;}
+  nav a:hover{opacity:1;color:var(--green-600);}
+  .logo{font-weight:800;font-size:1.2rem;color:var(--green-600);}
+  .page{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem;}
+  .hero{text-align:center;margin-bottom:2.5rem;}
+  .big-score{font-size:5rem;font-weight:900;
+    background:linear-gradient(135deg,var(--green-500),var(--green-700));
+    background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .score-label{color:var(--muted);font-size:1rem;margin-top:.3rem;}
+  .verdict-badge{display:inline-block;margin-top:.8rem;padding:.4rem 1.2rem;border-radius:99px;
+    font-weight:700;font-size:1rem;}
+  .verdict-badge[data-vclass="success"]{background:rgba(16,185,137,.15);color:var(--success);}
+  .verdict-badge[data-vclass="warning"]{background:rgba(245,158,11,.15);color:var(--warning);}
+  .verdict-badge[data-vclass="danger"]{background:rgba(239,68,68,.15);color:var(--danger);}
+  .qa-list{display:flex;flex-direction:column;gap:1.2rem;margin-bottom:2rem;}
+  .qa-card{background:rgba(255,255,255,0.05);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:1.4rem;backdrop-filter:blur(10px);}
+  .qa-card h3{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;}
+  .question-text{font-weight:600;margin-bottom:.8rem;line-height:1.5;}
+  .answer-text{color:#e0f2fe;font-size:.92rem;line-height:1.6;margin-bottom:.8rem;}
+  .eval-row{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin-top:.5rem;}
+  .pill{padding:.25rem .75rem;border-radius:99px;font-size:.78rem;font-weight:600;}
+  .pill-score{background:var(--green-500);color:#fff;}
+  .pill-good{background:#10b98120;color:var(--success);}
+  .pill-avg{background:#f59e0b20;color:var(--warning);}
+  .pill-poor{background:#ef444420;color:var(--danger);}
+  .eval-detail{font-size:.83rem;color:var(--muted);margin-top:.4rem;}
+  .eval-detail strong{color:var(--text);}
+  .coaching-box{background:linear-gradient(135deg,rgba(34,197,94,.15),rgba(22,163,74,.1));border:1px solid rgba(34,197,94,.3);
+    border-radius:12px;padding:1.6rem;margin-bottom:2rem;}
+  .coaching-box h2{color:var(--green-300);margin-bottom:.8rem;}
+  .coaching-box p{line-height:1.7;white-space:pre-wrap;color:#cbd5e1;font-size:.93rem;}
+  .cta-row{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
+  .btn{display:inline-block;padding:.8rem 1.6rem;border-radius:8px;text-decoration:none;
+       font-weight:600;cursor:pointer;transition:.2s;}
+  .btn-primary{background:linear-gradient(135deg,var(--green-500),var(--green-600));color:#fff;}
+  .btn-secondary{background:rgba(255,255,255,0.05);color:var(--text);border:1px solid rgba(34,197,94,.2);}
+  .btn:hover{opacity:.85;transform:translateY(-1px);}
+</style>
+</head>
+<body>
+<nav>
+  <span class="logo">⚡ PrepAI</span>
+  <div>
+    <a href="/">Home</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/mock">New Interview</a>
+  </div>
+</nav>
+<div class="page">
+  <div class="hero">
+    <div class="big-score">{{ avg_score }}<span style="font-size:2.5rem">/10</span></div>
+    <p class="score-label">Average Score across {{ answers|length }} questions — {{ topic }}</p>
+    {% set verdict = "Excellent 🏆" if avg_score >= 8 else ("Good 👍" if avg_score >= 6 else ("Average 📈" if avg_score >= 4 else "Keep Practicing 💪")) %}
+    {% set vclass = "success" if avg_score >= 8 else ("warning" if avg_score >= 5 else "danger") %}
+    <div class="verdict-badge" id="verdict" data-vclass="{{ vclass }}">{{ verdict }}</div>
+  </div>
+
+  {% if coaching_tips %}
+  <div class="coaching-box">
+    <h2>🧠 AI Coaching Tips</h2>
+    <p>{{ coaching_tips }}</p>
+  </div>
+  {% endif %}
+
+  <div class="qa-list">
+    {% for i in range(answers|length) %}
+    {% set ans = answers[i] %}
+    {% set res = results[i] %}
+    {% set score = res.score if res.score else 5 %}
+    <div class="qa-card">
+      <h3>Question {{ i+1 }}</h3>
+      <div class="question-text">{{ ans.question }}</div>
+      <h3 style="margin-top:.5rem">Your Answer</h3>
+      <div class="answer-text">{{ ans.answer }}</div>
+      <div class="eval-row">
+        <span class="pill pill-score">{{ score }}/10</span>
+        {% if res.verdict %}
+          <span class="pill {% if score >= 7 %}pill-good{% elif score >= 5 %}pill-avg{% else %}pill-poor{% endif %}">
+            {{ res.verdict }}
+          </span>
+        {% endif %}
+      </div>
+      {% if res.strengths or res.improvements %}
+      <div class="eval-detail" style="margin-top:.6rem">
+        {% if res.strengths %}<div>✅ <strong>Strength:</strong> {{ res.strengths }}</div>{% endif %}
+        {% if res.improvements %}<div style="margin-top:.3rem">⬆️ <strong>Improve:</strong> {{ res.improvements }}</div>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="cta-row">
+    <a href="/mock" class="btn btn-primary">🔁 Try Again</a>
+    <a href="/dashboard" class="btn btn-secondary">📊 View Dashboard</a>
+    <a href="/cover_letter" class="btn btn-secondary">📝 Write Cover Letter</a>
+  </div>
+</div>
+</body>
+</html>

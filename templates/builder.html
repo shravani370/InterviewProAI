@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Resume Builder</title>
+
+<style>
+/* SAME STYLE */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #050810, #0d1117);
+  color: white;
+}
+
+.container {
+  width: 60%;
+  margin: auto;
+  padding: 30px;
+}
+
+.card {
+  background: rgba(255,255,255,0.03);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #1e2738;
+  backdrop-filter: blur(10px);
+}
+
+input, textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+button {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(90deg, #00e5ff, #7c3aed);
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.result {
+  background: #111827;
+  padding: 20px;
+  border-radius: 10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <h2>🧠 Resume Builder</h2>
+
+  <div class="card">
+    <form action="/builder" method="POST">
+
+      <input name="name" placeholder="Name" value="{{ name or '' }}">
+      <textarea name="skills" placeholder="Skills">{{ skills or '' }}</textarea>
+      <textarea name="experience" placeholder="Experience">{{ experience or '' }}</textarea>
+
+      <button type="submit">Generate Resume</button>
+
+    </form>
+  </div>
+
+  {% if result %}
+  <div class="card result">
+    <h3>📄 Generated Resume</h3>
+    <pre style="white-space: pre-wrap;">{{ result }}</pre>
+  </div>
+  {% endif %}
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background:#ecffe0;;
+  color: white;
+}
+
+/* CONTAINER */
+.container {
+  width: 80%;
+  margin: auto;
+  padding: 30px;
+}
+
+/* CARD */
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* INPUT */
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+/* BUTTON */
+button {
+  margin-top: 15px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* JOB CARD */
+.job-card {
+  background: #064e3b;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}

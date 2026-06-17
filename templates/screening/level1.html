@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Level 1 · MCQ Screening — InterviewPro AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --g50: #f0fdf4; --g100: #dcfce7; --g200: #bbf7d0;
+  --g400: #4ade80; --g500: #22c55e; --g600: #16a34a; --g700: #15803d; --g900: #064e3b;
+  --cream: #ecffe0; --white: #ffffff; --gray: #6b7280;
+}
+body { font-family: 'Sora', sans-serif; min-height: 100vh; background: var(--cream); color: var(--g900); }
+
+/* Header */
+.header { display:flex; align-items:center; justify-content:space-between; padding:18px 40px;
+  background:rgba(236,255,224,.95); border-bottom:1px solid rgba(34,197,94,.15);
+  position:sticky; top:0; z-index:100; backdrop-filter:blur(12px); }
+.logo { font-weight:800; font-size:20px; color:var(--g600); }
+.logo span { color:var(--g900); }
+
+/* Progress bar */
+.progress-wrap { background:var(--white); border-bottom:1px solid var(--g200); padding:14px 40px; }
+.progress-steps { display:flex; align-items:center; gap:0; max-width:600px; margin:0 auto; }
+.step { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; position:relative; }
+.step:not(:last-child)::after { content:""; position:absolute; top:14px; left:50%; width:100%;
+  height:2px; background:var(--g200); z-index:0; }
+.step.active:not(:last-child)::after, .step.done:not(:last-child)::after { background:var(--g500); }
+.step-dot { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; z-index:1; border:2px solid var(--g200); background:var(--white); color:var(--gray); }
+.step.active .step-dot { background:var(--g500); border-color:var(--g500); color:var(--white); }
+.step.done .step-dot { background:var(--g700); border-color:var(--g700); color:var(--white); }
+.step-label { font-size:10px; font-weight:600; color:var(--gray); letter-spacing:.5px; text-transform:uppercase; }
+.step.active .step-label { color:var(--g600); }
+.step.done .step-label { color:var(--g700); }
+
+/* Timer */
+.timer-bar { background:var(--g900); color:var(--g400); padding:10px 40px; text-align:center;
+  font-size:13px; font-weight:700; letter-spacing:.5px; display:flex; align-items:center; justify-content:center; gap:10px; }
+#timer { font-size:18px; font-weight:800; color:var(--white); }
+.timer-bar.urgent { background:#7f1d1d; }
+.timer-bar.urgent #timer { color:#fca5a5; }
+
+/* Main */
+.main { max-width:760px; margin:0 auto; padding:32px 20px 60px; }
+.screen-title { font-size:26px; font-weight:800; color:var(--g900); margin-bottom:4px; }
+.screen-sub { font-size:14px; color:var(--gray); margin-bottom:28px; font-weight:300; }
+
+/* Q Card */
+.q-card { background:var(--white); border:1px solid var(--g200); border-radius:18px;
+  padding:28px; margin-bottom:16px; transition:.2s; }
+.q-card:hover { border-color:var(--g400); box-shadow:0 4px 20px rgba(34,197,94,.08); }
+.q-num { font-size:11px; font-weight:700; color:var(--g600); text-transform:uppercase;
+  letter-spacing:.6px; margin-bottom:8px; }
+.q-text { font-size:16px; font-weight:600; color:var(--g900); margin-bottom:18px; line-height:1.5; }
+.options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.opt-label { display:flex; align-items:center; gap:10px; padding:11px 16px; border-radius:10px;
+  border:1.5px solid var(--g200); cursor:pointer; transition:.18s; font-size:13px; font-weight:500; }
+.opt-label:hover { border-color:var(--g500); background:var(--g50); }
+.opt-label input { accent-color:var(--g500); width:16px; height:16px; }
+.opt-label:has(input:checked) { border-color:var(--g500); background:var(--g100); font-weight:700; }
+
+/* Submit */
+.submit-wrap { text-align:center; margin-top:32px; }
+.submit-btn { padding:16px 48px; border-radius:100px;
+  background:linear-gradient(135deg, var(--g500), var(--g700));
+  color:var(--white); font-family:'Sora',sans-serif; font-size:15px; font-weight:700;
+  border:none; cursor:pointer; transition:.25s;
+  box-shadow:0 4px 20px rgba(34,197,94,.35); }
+.submit-btn:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(34,197,94,.4); }
+
+/* Info pill */
+.info-pill { display:inline-flex; align-items:center; gap:6px; background:var(--g100);
+  border:1px solid var(--g200); border-radius:100px; padding:5px 14px;
+  font-size:12px; font-weight:600; color:var(--g700); margin-bottom:20px; }
+
+@media(max-width:600px) { .options { grid-template-columns:1fr; } .header { padding:16px 20px; } }
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="logo">Interview<span>Pro</span> AI</div>
+  <span style="font-size:13px;font-weight:600;color:var(--g600);">🛡️ Screening Round</span>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="step active">
+      <div class="step-dot">1</div>
+      <div class="step-label">MCQ</div>
+    </div>
+    <div class="step">
+      <div class="step-dot">2</div>
+      <div class="step-label">Coding</div>
+    </div>
+    <div class="step">
+      <div class="step-dot">3</div>
+      <div class="step-label">Interview</div>
+    </div>
+  </div>
+</div>
+
+<div class="timer-bar" id="timerBar">
+  ⏱ Time Remaining: <span id="timer">10:00</span>
+</div>
+
+<div class="main">
+  <div class="info-pill">📋 Role: {{ role }}</div>
+  <div class="screen-title">Level 1 — MCQ Screening</div>
+  <div class="screen-sub">Answer all {{ questions|length }} questions. Pass mark: {{ 60 }}% · Auto-submits when timer ends.</div>
+
+  <form method="POST" action="/screening/level1/submit" id="mcqForm">
+    {% for i, q in questions | enumerate %}
+    <div class="q-card">
+      <div class="q-num">Question {{ i + 1 }} of {{ questions|length }}</div>
+      <div class="q-text">{{ q.q }}</div>
+      <div class="options">
+        {% for j, opt in q.options | enumerate %}
+        <label class="opt-label">
+          <input type="radio" name="q{{ i }}" value="{{ j }}" required>
+          {{ opt }}
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="submit-wrap">
+      <button type="submit" class="submit-btn">Submit Answers →</button>
+    </div>
+  </form>
+</div>
+
+<script type="application/json" id="durationData">{{ duration|safe }}</script>
+
+<script>
+  const durationValue = JSON.parse(document.getElementById('durationData').textContent || '0');
+  var total = durationValue;
+var elapsed = 0;
+var interval = setInterval(function() {
+  elapsed++;
+  var left = total - elapsed;
+  if (left <= 0) {
+    clearInterval(interval);
+    document.getElementById('mcqForm').submit();
+    return;
+  }
+  var m = Math.floor(left / 60), s = left % 60;
+  document.getElementById('timer').textContent =
+    (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  if (left <= 60) document.getElementById('timerBar').classList.add('urgent');
+}, 1000);
+</script>
+</body>
+</html>

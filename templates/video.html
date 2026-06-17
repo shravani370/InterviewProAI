@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Interview | InterviewPro AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green-50: #f0fdf4;
+      --green-100: #dcfce7;
+      --green-200: #bbf7d0;
+      --green-400: #4ade80;
+      --green-500: #22c55e;
+      --green-600: #16a34a;
+      --green-700: #15803d;
+      --green-900: #064e3b;
+      --red-500: #ef4444;
+      --red-600: #dc2626;
+      --gray-50: #f9fafb;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Sora', sans-serif;
+    }
+
+    body {
+      background: var(--gray-900);
+      color: white;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 35% 65%;
+      height: 100vh;
+      gap: 0;
+    }
+
+    /* ========== LEFT PANEL ========== */
+    .left-panel {
+      background: linear-gradient(135deg, var(--green-50) 0%, #e6f9f1 100%);
+      padding: 50px 45px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: var(--green-900);
+      overflow-y: auto;
+    }
+
+    .logo {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--green-600);
+      margin-bottom: 50px;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span { color: var(--green-900); }
+
+    .left-panel h1 {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .left-panel h1 span {
+      background: linear-gradient(135deg, var(--green-500), var(--green-700));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .left-panel p {
+      font-size: 15px;
+      color: var(--green-700);
+      line-height: 1.6;
+      margin-bottom: 40px;
+      font-weight: 400;
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--green-700);
+      font-weight: 500;
+    }
+
+    .check-item::before {
+      content: "✓";
+      width: 26px;
+      height: 26px;
+      background: var(--green-500);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(34,197,94,.2);
+    }
+
+    /* ========== RIGHT PANEL ========== */
+    .right-panel {
+      background: var(--gray-900);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+    }
+
+    .right-panel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .right-panel::-webkit-scrollbar-thumb {
+      background: rgba(34,197,94,.2);
+      border-radius: 3px;
+    }
+
+    /* ========== CONTENT WRAPPER ========== */
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex: 1;
+    }
+
+    /* ========== HEADER ========== */
+    .interview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(34,197,94,.15);
+    }
+
+    .interview-header h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,.7);
+      letter-spacing: 0.5px;
+    }
+
+    .timer {
+      background: rgba(34,197,94,.12);
+      color: var(--green-400);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 13px;
+      min-width: 75px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .timer.warning {
+      background: rgba(239,68,68,.12);
+      color: #ff7a7a;
+    }
+
+    .timer.danger {
+      background: rgba(239,68,68,.2);
+      color: var(--red-500);
+      animation: pulse-danger 0.8s infinite;
+    }
+
+    @keyframes pulse-danger { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    /* ========== QUESTION CARD ========== */
+    .question-card {
+      background: linear-gradient(135deg, rgba(34,197,94,.08) 0%, rgba(22,163,74,.04) 100%);
+      border: 1px solid rgba(34,197,94,.25);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .question-card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      line-height: 1.6;
+      letter-spacing: -0.3px;
+    }
+
+    /* ========== VIDEO SECTION ========== */
+    .video-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      background: var(--gray-800);
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid rgba(34,197,94,.25);
+      box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #000;
+    }
+
+    .video-indicator {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 10px;
+      height: 10px;
+      background: var(--red-500);
+      border-radius: 50%;
+      animation: blink 0.8s infinite;
+      box-shadow: 0 0 8px var(--red-500);
+    }
+
+    @keyframes blink { 0%, 49%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+    /* ========== STATUS AREA ========== */
+    .status-bar {
+      background: rgba(34,197,94,.1);
+      border-left: 4px solid var(--green-500);
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green-300);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+
+    .status-bar.warning {
+      background: rgba(239,68,68,.1);
+      border-left-color: var(--red-500);
+      color: #ff9090;
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green-500);
+      animation: pulse-dot 2s infinite;
+      flex-shrink: 0;
+    }
+
+    .status-bar.warning .status-indicator {
+      background: var(--red-500);
+      animation: pulse-danger-dot 0.7s infinite;
+    }
+
+    @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    @keyframes pulse-danger-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* ========== WARNINGS PANEL ========== */
+    .warnings-panel {
+      background: rgba(239,68,68,.08);
+      border: 1px solid rgba(239,68,68,.25);
+      border-radius: 10px;
+      padding: 14px;
+      display: none;
+    }
+
+    .warnings-panel.visible { display: block; }
+
+    .warning-item {
+      font-size: 12px;
+      color: #ff9090;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .warning-item:last-child { margin-bottom: 0; }
+
+    .warning-badge {
+      background: var(--red-500);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 3px;
+      min-width: 28px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* ========== ANSWER AREA ========== */
+    .answer-section {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 90px;
+      background: var(--gray-800);
+      border: 1.5px solid rgba(34,197,94,.2);
+      border-radius: 10px;
+      padding: 12px;
+      color: white;
+      font-family: 'Sora', sans-serif;
+      font-size: 13px;
+      resize: none;
+      transition: all 0.3s;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--green-500);
+      background: rgba(34,197,94,.05);
+      box-shadow: 0 0 0 2px rgba(34,197,94,.1);
+    }
+
+    textarea::placeholder { color: rgba(255,255,255,.35); }
+
+    /* ========== BUTTONS ========== */
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Sora', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .btn-speak {
+      background: linear-gradient(135deg, var(--green-500), var(--green-600));
+      color: white;
+      box-shadow: 0 4px 12px rgba(34,197,94,.25);
+    }
+
+    .btn-speak:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(34,197,94,.35);
+    }
+
+    .btn-speak:active { transform: scale(.99); }
+
+    .btn-next {
+      background: transparent;
+      color: var(--green-400);
+      border: 1.5px solid var(--green-500);
+    }
+
+    .btn-next:hover {
+      background: rgba(34,197,94,.1);
+      transform: translateY(-1px);
+    }
+
+    .btn-next:active { transform: scale(.99); }
+
+    form { width: 100%; }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1200px) {
+      .container { grid-template-columns: 40% 60%; }
+      .left-panel { padding: 40px 35px; }
+      .left-panel h1 { font-size: 36px; }
+    }
+
+    @media (max-width: 768px) {
+      .container { 
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+      .left-panel { 
+        padding: 35px 25px;
+        min-height: auto;
+      }
+      .left-panel h1 { font-size: 28px; }
+      .right-panel { padding: 25px; }
+      .video-wrapper { max-width: 280px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="logo">Interview<span>Pro</span> AI</div>
+    <h1>Ace Your <span>Video Interview</span></h1>
+    <p>Be clear, confident, and authentic. You're being evaluated on communication and presence.</p>
+    
+    <div class="checklist">
+      <div class="check-item">Good lighting on your face</div>
+      <div class="check-item">Quiet, professional background</div>
+      <div class="check-item">Stable camera position</div>
+      <div class="check-item">Only you on camera</div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+
+    <div class="content">
+
+      <!-- HEADER WITH TIMER -->
+      <div class="interview-header">
+        <h3>QUESTION IN PROGRESS</h3>
+        <div class="timer" id="timer">60s</div>
+      </div>
+
+      <!-- QUESTION CARD -->
+      <div class="question-card">
+        <h2 id="question">{{ question }}</h2>
+      </div>
+
+      <!-- VIDEO SECTION -->
+      <div class="video-section">
+        <div class="video-wrapper">
+          <video id="video" autoplay muted playsinline></video>
+          <div class="video-indicator"></div>
+        </div>
+      </div>
+
+      <!-- STATUS BAR -->
+      <div class="status-bar" id="statusBar">
+        <div class="status-indicator"></div>
+        <span id="status">Initializing camera...</span>
+      </div>
+
+      <!-- WARNINGS PANEL -->
+      <div class="warnings-panel" id="warningsPanel">
+        <div id="warningsContent"></div>
+      </div>
+
+    </div>
+
+    <!-- ANSWER SECTION (Bottom) -->
+    <div class="answer-section">
+      <textarea id="answer" placeholder="Your answer will appear here..."></textarea>
+      
+      <div class="button-group">
+        <button type="button" class="btn-speak" onclick="startListening()">🎤 Record Answer</button>
+      </div>
+
+      <form action="/submit" method="POST" onsubmit="return validateAnswer(event)">
+        <input type="hidden" name="answer" id="hiddenAnswer">
+        <button type="submit" class="btn-next">
+          Continue to Next Question →
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+<script src="/static/script.js"></script>
+
+</body>
+</html>

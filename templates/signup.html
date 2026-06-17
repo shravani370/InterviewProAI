@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sign Up - InterviewPro AI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;600;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* BODY */
+body {
+  margin: 0;
+  font-family: 'Sora', sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 💚 LEFT */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: #ecffe0;
+  z-index: -1;
+}
+
+/* 🤍 RIGHT */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background: white;
+  z-index: -1;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 40px;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 30px;
+  color: #16a34a;
+}
+
+/* BACK BUTTON */
+.back {
+  cursor: pointer;
+  color: #16a34a;
+  font-weight: 600;
+}
+
+/* CENTER */
+.container {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:80vh;
+}
+
+/* CARD */
+.card {
+  background:white;
+  padding:40px;
+  border-radius:20px;
+  width:380px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* TITLE */
+h2 {
+  text-align:center;
+  margin-bottom:20px;
+}
+
+/* INPUT */
+input {
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  font-size:14px;
+}
+
+/* BUTTON */
+button {
+  width:100%;
+  margin-top:18px;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* TEXT */
+p {
+  text-align:center;
+  margin-top:12px;
+}
+
+a {
+  color:#16a34a;
+  text-decoration:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">InterviewPro AI</div>
+  <div class="back" onclick="goHome()">⬅ Home</div>
+</div>
+
+<!-- FORM -->
+<div class="container">
+  <div class="card">
+
+    <h2>Create Account</h2>
+
+    <form method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input name="name" placeholder="Full Name" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <p>Already have an account? <a href="/login">Login</a></p>
+
+  </div>
+</div>
+
+<script>
+function goHome(){
+  window.location.href="/";
+}
+function checkEmail(){
+  const email = document.getElementById("email").value;
+
+  if(!email.endsWith("@gmail.com")){
+    document.getElementById("error").textContent = "Invalid Gmail address ❌";
+    return;
+  }
+
+  window.location.href = "/google-login";
+}
+</script>
+
+</body>
+</html>
